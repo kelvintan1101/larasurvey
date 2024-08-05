@@ -7,8 +7,8 @@
         </h1>
       </div>
     </template>
-
-    <form @submit.prevent="saveSurvey">
+    <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
+    <form v-else @submit.prevent="saveSurvey">
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
           <!--Image-->
@@ -190,28 +190,36 @@
 <script setup>
 import { v4 as uuidv4 } from "uuid";
 import store from "../store";
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageComponent from "../components/PageComponent.vue";
 import QuestionEditor from "../components/editor/QuestionEditor.vue";
 
 const router = useRouter();
 const route = useRoute();
+const surveyLoading = computed(() => store.state.currentSurvey.loading);
 
 let model = ref({
   title: "",
   status: false,
   description: null,
-  image: null,
   image_url: null,
   expire_date: null,
   questions: [],
 });
 
+watch(
+  () => store.state.currentSurvey.data,
+  (newVal, oldVal) => {
+    model.value = {
+      ...JSON.parse(JSON.stringify(newVal)),
+      status: newVal.status !== "draft",
+    };
+  }
+);
+
 if (route.params.id) {
-  model.value = store.state.surveys.find(
-    (s) => s.id === parseInt(route.params.id)
-  );
+  store.dispatch("getSurvey", route.params.id);
 }
 
 function onImageChoose(ev) {
