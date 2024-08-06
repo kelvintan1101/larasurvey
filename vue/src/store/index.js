@@ -152,7 +152,7 @@ const store = createStore({
       loading: false,
       data: [],
     },
-    questionTypes: ["text", "select", "radio", "checkbox", "textare"],
+    questionTypes: ["text", "select", "radio", "checkbox", "textarea"],
   },
   getters: {},
   actions: {

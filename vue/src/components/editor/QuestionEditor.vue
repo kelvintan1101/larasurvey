@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-between">
-    <h3 class="text-lg font-bold">{{ index + 1 }}.{{ model.question }}</h3>
+    <h3 class="text-lg font-bold">{{ index + 1 }}. {{ model.question }}</h3>
     <div class="flex items-center">
       <!-- Add new question -->
       <button
@@ -81,7 +81,7 @@
         @change="typeChange"
         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       >
-        <option v-for="type in questionTypes" :key="type">
+        <option v-for="type in questionTypes" :key="type" :value="type">
           {{ upperCaseFirst(type) }}
         </option>
       </select>
