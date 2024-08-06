@@ -148,7 +148,10 @@ const store = createStore({
       loading: false,
       data: {},
     },
-    surveys: [...tmpSurveys],
+    surveys: {
+      loading: false,
+      data: [],
+    },
     questionTypes: ["text", "select", "radio", "checkbox", "textare"],
   },
   getters: {},
@@ -188,6 +191,14 @@ const store = createStore({
     deleteSurvey({}, id) {
       return axiosClient.delete(`/survey/${id}`);
     },
+    getSurveys({ commit }) {
+      commit("setSurveysLoading", true);
+      return axiosClient.get("/survey").then((res) => {
+        commit("setSurveysLoading", false);
+        commit("setSurveys", res.data);
+        return res;
+      });
+    },
     register({ commit }, user) {
       return axiosClient.post("/register", user).then(({ data }) => {
         commit("setUser", data);
@@ -211,10 +222,15 @@ const store = createStore({
     setCurrentSurveyLoading: (state, loading) => {
       state.currentSurvey.loading = loading;
     },
+    setSurveysLoading: (state, loading) => {
+      state.surveys.loading = loading;
+    },
     setCurrentSurvey: (state, survey) => {
       state.currentSurvey.data = survey.data;
     },
-
+    setSurveys: (state, surveys) => {
+      state.surveys.data = surveys.data;
+    },
     logout: (state) => {
       state.user.data = {};
       state.user.token = null;
