@@ -282,6 +282,10 @@ function questionChange(question) {
 
 function saveSurvey() {
   store.dispatch("saveSurvey", model.value).then(({ data }) => {
+    store.commit("notify", {
+      message: "Survey was successfully updated",
+      type: "success",
+    });
     router.push({
       name: "SurveyView",
       params: { id: data.data.id },
