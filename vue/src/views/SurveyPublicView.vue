@@ -67,6 +67,7 @@ store.dispatch("getSurveyBySlug", route.params.slug);
 
 function submitSurvey() {
   console.log(JSON.stringify(answers.value, undefined, 2));
+  console.log("Here");
   store
     .dispatch("saveSurveyAnswer", {
       surveyId: survey.value.id,
@@ -76,6 +77,9 @@ function submitSurvey() {
       if (response.status === 201) {
         surveyFinished.value = true;
       }
+    })
+    .catch((error) => {
+      console.error(error);
     });
 }
 
